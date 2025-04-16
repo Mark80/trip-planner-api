@@ -1,4 +1,4 @@
-const TripService = require('./tripService');
+const TripService = require('../tripService');
 
 describe('TripService', () => {
   let tripDalMock;
