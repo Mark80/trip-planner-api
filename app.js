@@ -2,13 +2,14 @@
 require('dotenv').config();
 const express = require('express');
 const TripService = require('./tripService');
+const TripServiceDal = require('./tripDal');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const tripService = new TripService();
+const tripService = new TripService(new TripServiceDal);
 
 app.get('/api/trips/search', async (req, res) => {
     const { origin, destination, sort_by } = req.query;

@@ -5,16 +5,14 @@ const API_KEY = process.env.TRIPS_API_KEY;
 let savedTrips = [];
 
 class TripService {
+
+    constructor(tripServiceDal){
+        this.tripDal = tripServiceDal;
+    }
+
+
    async fetchAndSortTrips(origin, destination, sort_by) {
-    const response = await axios.get(TRIPS_API_URL, {
-      headers: {
-        'x-api-key': API_KEY
-      },
-      params: {
-        origin,
-        destination
-      }
-    });
+    const response = await this.tripDal.getTrips(origin, destination);
 
     const filteredTrips = response.data.filter(trip =>
       trip.origin === origin && trip.destination === destination
