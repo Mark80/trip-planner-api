@@ -1,0 +1,95 @@
+{
+    "info": {
+      "name": "Trip Planner API",
+      "_postman_id": "a1111aaa-2222-bbbb-3333-cccc4444dddd",
+      "description": "Test collection for Trip Planner API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Search Trip - Cheapest",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:3000/api/trips/search?origin=SYD&destination=GRU&sort_by=cheapest",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "trips", "search"],
+            "query": [
+              { "key": "origin", "value": "SYD" },
+              { "key": "destination", "value": "GRU" },
+              { "key": "sort_by", "value": "cheapest" }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Search Trip - Fastest",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:3000/api/trips/search?origin=SYD&destination=GRU&sort_by=fastest",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "trips", "search"],
+            "query": [
+              { "key": "origin", "value": "SYD" },
+              { "key": "destination", "value": "GRU" },
+              { "key": "sort_by", "value": "fastest" }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Save Trip",
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"id\": \"test-trip-001\",\n  \"origin\": \"SYD\",\n  \"destination\": \"GRU\",\n  \"cost\": 500,\n  \"duration\": 7,\n  \"type\": \"flight\",\n  \"display_name\": \"from SYD to GRU by flight\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3000/api/trips/save",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "trips", "save"]
+          }
+        }
+      },
+      {
+        "name": "List Saved Trips",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:3000/api/trips/saved",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "trips", "saved"]
+          }
+        }
+      },
+      {
+        "name": "Delete Trip by ID",
+        "request": {
+          "method": "DELETE",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:3000/api/trips/delete/test-trip-001",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "trips", "delete", "test-trip-001"]
+          }
+        }
+      }
+    ]
+  }
+  
