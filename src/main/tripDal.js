@@ -2,6 +2,8 @@ const axios = require('axios');
 const TRIPS_API_URL = 'https://z0qw1e7jpd.execute-api.eu-west-1.amazonaws.com/default/trips';
 const API_KEY = process.env.TRIPS_API_KEY;
 
+let savedTrips = [];
+
 class TripServiceDal {
 
     async getTrips(origin, destination){
@@ -15,6 +17,20 @@ class TripServiceDal {
               }
             });
     }
+
+    saveTrip(trip){
+      savedTrips.push(trip);
+    }
+
+    deleteTrip(id){
+      return savedTrips.filter(trip => trip.id !== id);  
+    }
+
+    all(){
+      return savedTrips;
+    }
+
+
 
 }
 

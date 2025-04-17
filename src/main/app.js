@@ -11,7 +11,6 @@ app.use(express.json());
 
 const tripService = new TripService(new TripServiceDal());
 
-// 🔒 Middleware di autenticazione
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];

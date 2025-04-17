@@ -28,17 +28,18 @@ class TripService {
     if (!trip || !trip.id) {
       return res.status(400).json({ error: 'Trip data with ID is required' });
     }
-    savedTrips.push(trip);
+    this.tripDal.saveTrip(trip);
     res.status(201).json({ message: 'Trip saved', trip });
   }
 
    listSavedTrips(req, res) {
+    this.tripDal.all();
     res.json(savedTrips);
   }
 
    deleteTrip(req, res) {
     const { id } = req.params;
-    savedTrips = savedTrips.filter(trip => trip.id !== id);
+    this.tripDal.deleteTrip(trip)
     res.json({ message: `Trip ${id} deleted` });
   }
 }
