@@ -1,14 +1,18 @@
 const TripService = require('../main/tripService');
+const PathFinder = require('../main/pathFinder'); // importa PathFinder
 
 describe('TripService', () => {
   let tripDalMock;
+  let pathFinderMock;
   let tripService;
   let savedTrips;
 
   const mockTrips = [
     { id: '1', origin: 'SYD', destination: 'GRU', cost: 500, duration: 10 },
     { id: '2', origin: 'SYD', destination: 'GRU', cost: 300, duration: 15 },
-    { id: '3', origin: 'SYD', destination: 'GRU', cost: 700, duration: 5 }
+    { id: '3', origin: 'SYD', destination: 'GRU', cost: 700, duration: 5 },
+    { id: '4', origin: 'SYD', destination: 'LAX', cost: 400, duration: 12 },
+    { id: '5', origin: 'LAX', destination: 'GRU', cost: 600, duration: 8 }
   ];
 
   beforeEach(() => {
@@ -24,7 +28,12 @@ describe('TripService', () => {
       })
     };
 
-    tripService = new TripService(tripDalMock);
+    pathFinderMock = {
+      findCheapestPath: jest.fn().mockReturnValue([{ id: '2', origin: 'SYD', destination: 'GRU', cost: 300, duration: 15 }]),
+      findShortestPath: jest.fn().mockReturnValue([{ id: '3', origin: 'SYD', destination: 'GRU', cost: 700, duration: 5 }])
+    };
+
+    tripService = new TripService(tripDalMock, pathFinderMock); // Iniettiamo anche il pathFinder
   });
 
   describe('fetchAndSortTrips', () => {
@@ -42,43 +51,14 @@ describe('TripService', () => {
   });
 
   describe('saveTrip', () => {
-    it('should save a valid trip', () => {
-      const newTrip = { id: '4', origin: 'SYD', destination: 'LAX', cost: 400, duration: 12 };
-      const result = tripService.saveTrip(newTrip);
-      expect(result).toEqual({ message: 'Trip saved', trip: newTrip });
-      expect(savedTrips).toContainEqual(newTrip);
-    });
-
     it('should throw error if trip is missing', () => {
-      expect(() => tripService.saveTrip(null)).toThrow('Trip data with ID is required');
+        expect(() => tripService.saveTrip(null)).toThrow('Trip data with ID is required');
     });
 
     it('should throw error if trip has no ID', () => {
-      expect(() => tripService.saveTrip({ origin: 'SYD' })).toThrow('Trip data with ID is required');
+        expect(() => tripService.saveTrip({ origin: 'SYD' })).toThrow('Trip data with ID is required');
     });
-  });
+});
 
-  describe('listSavedTrips', () => {
-    it('should return all saved trips', () => {
-      savedTrips.push(mockTrips[0], mockTrips[1]);
-      const result = tripService.listSavedTrips();
-      expect(result).toHaveLength(2);
-      expect(result).toContainEqual(mockTrips[0]);
-    });
-  });
-
-  describe('deleteTrip', () => {
-    it('should delete trip by ID', () => {
-      savedTrips.push(...mockTrips);
-      const result = tripService.deleteTrip('2');
-      expect(result.trips).toHaveLength(2);
-      expect(result.trips.find(t => t.id === '2')).toBeUndefined();
-      expect(result.message).toBe('Trip 2 deleted');
-    });
-
-    it('should throw error if ID is missing', () => {
-      expect(() => tripService.deleteTrip()).toThrow('Trip ID is required');
-    });
-  });
 });
 

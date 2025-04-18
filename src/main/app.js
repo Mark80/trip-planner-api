@@ -3,13 +3,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const TripService = require('./tripService');
 const TripServiceDal = require('./tripDal');
+const PathFinder = require('./pathFinder');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const tripService = new TripService(new TripServiceDal());
+const tripService = new TripService(new TripServiceDal(), new PathFinder());
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -40,15 +41,21 @@ app.post('/api/auth/login', (req, res) => {
 app.get('/api/trips/search', async (req, res) => {
   const { origin, destination, sort_by } = req.query;
 
-  if (!origin || !destination || !['fastest', 'cheapest'].includes(sort_by)) {
-    return res.status(400).json({ error: 'Missing or invalid parameters' });
-  }
-
   try {
-    const trips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
-    res.json(trips);
+    const allTripsResponse = await tripService.tripDal.getTrips(origin, destination);
+    const allTrips = allTripsResponse.data;
+
+    const sortedTrips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
+    const bestMatch = await tripService.findBestMatch(allTrips, origin, destination, sort_by);
+
+    res.json({
+      sortedTrips,
+      bestMatch
+    });
+
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch trips' });
+    console.error('Errore nella search:', err);
+    res.status(500).json({ error: 'Errore durante la ricerca dei viaggi' });
   }
 });
 
