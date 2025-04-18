@@ -1,54 +1,67 @@
 class PathFinder {
-    findCheapestPath(trips, origin, destination) {
-      const graph = {};
-  
-      // Costruisci il grafo
-      for (const trip of trips) {
-        if (!graph[trip.origin]) {
-          graph[trip.origin] = [];
+  constructor() {}
+
+  findCheapestPath(trips, origin, destination) {
+    return this._findPath(trips, origin, destination, 'cost');
+  }
+
+  findShortestPath(trips, origin, destination) {
+    return this._findPath(trips, origin, destination, 'hops');
+  }
+
+  _findPath(trips, origin, destination, mode) {
+    const graph = this._buildGraph(trips);
+    const visited = new Set();
+    const queue = [{ node: origin, path: [], totalCost: 0 }];
+
+    let bestPath = null;
+    let bestValue = Infinity;
+
+    while (queue.length > 0) {
+      const current = queue.shift();
+      const { node, path, totalCost } = current;
+
+      if (node === destination) {
+        const value = mode === 'cost' ? totalCost : path.length;
+        if (value < bestValue) {
+          bestValue = value;
+          bestPath = path;
         }
-        graph[trip.origin].push({
-          destination: trip.destination,
-          cost: trip.cost,
-          trip
+        continue;
+      }
+
+      if (!graph[node]) continue;
+
+      for (const neighbor of graph[node]) {
+        const visitKey = `${node}-${neighbor.destination}-${mode}`;
+        if (visited.has(visitKey)) continue;
+
+        visited.add(visitKey);
+        queue.push({
+          node: neighbor.destination,
+          path: [...path, neighbor.trip],
+          totalCost: totalCost + neighbor.cost
         });
       }
-  
-      const visited = new Set();
-      const queue = [{ node: origin, path: [], totalCost: 0 }];
-  
-      let bestPath = null;
-      let minCost = Infinity;
-  
-      while (queue.length > 0) {
-        const current = queue.shift();
-        const { node, path, totalCost } = current;
-  
-        if (node === destination) {
-          if (totalCost < minCost) {
-            minCost = totalCost;
-            bestPath = path;
-          }
-          continue;
-        }
-  
-        if (!graph[node]) continue;
-  
-        for (const neighbor of graph[node]) {
-          if (visited.has(`${node}-${neighbor.destination}`)) continue;
-  
-          visited.add(`${node}-${neighbor.destination}`);
-          queue.push({
-            node: neighbor.destination,
-            path: [...path, neighbor.trip],
-            totalCost: totalCost + neighbor.cost
-          });
-        }
-      }
-  
-      return bestPath;
     }
+
+    return bestPath;
   }
-  
-  module.exports = PathFinder;
-  
+
+  _buildGraph(trips) {
+    const graph = {};
+    for (const trip of trips) {
+      if (!graph[trip.origin]) {
+        graph[trip.origin] = [];
+      }
+      graph[trip.origin].push({
+        destination: trip.destination,
+        cost: trip.cost,
+        trip
+      });
+    }
+    return graph;
+  }
+}
+
+module.exports = PathFinder;

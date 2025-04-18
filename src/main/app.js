@@ -36,8 +36,8 @@ app.post('/api/auth/login', (req, res) => {
   res.json({ token });
 });
 
-// ✈️ Rotte protette
-app.get('/api/trips/search', authenticateToken, async (req, res) => {
+
+app.get('/api/trips/search', async (req, res) => {
   const { origin, destination, sort_by } = req.query;
 
   if (!origin || !destination || !['fastest', 'cheapest'].includes(sort_by)) {
@@ -45,17 +45,36 @@ app.get('/api/trips/search', authenticateToken, async (req, res) => {
   }
 
   try {
-    const sortedTrips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
-    res.json(sortedTrips);
-  } catch (error) {
-    console.error('Error fetching trips:', error);
+    const trips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
+    res.json(trips);
+  } catch (err) {
     res.status(500).json({ error: 'Failed to fetch trips' });
   }
 });
 
-app.post('/api/trips/save', authenticateToken, (req, res) => tripService.saveTrip(req, res));
-app.get('/api/trips/saved', authenticateToken, (req, res) => tripService.listSavedTrips(req, res));
-app.delete('/api/trips/delete/:id', authenticateToken, (req, res) => tripService.deleteTrip(req, res));
+
+app.post('/api/trips/save', (req, res) => {
+  try {
+    const result = tripService.saveTrip(req.body);
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.get('/api/trips/saved', (req, res) => {
+  const trips = tripService.listSavedTrips();
+  res.json(trips);
+});
+
+app.delete('/api/trips/delete/:id', (req, res) => {
+  try {
+    const result = tripService.deleteTrip(req.params.id);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Trip Planner API running on port ${PORT}`);

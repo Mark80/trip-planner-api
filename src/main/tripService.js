@@ -5,17 +5,14 @@ const API_KEY = process.env.TRIPS_API_KEY;
 let savedTrips = [];
 
 class TripService {
+  constructor(tripServiceDal) {
+    this.tripDal = tripServiceDal;
+  }
 
-    constructor(tripServiceDal){
-        this.tripDal = tripServiceDal;
-    }
-
-
-   async fetchAndSortTrips(origin, destination, sort_by) {
+  async fetchAndSortTrips(origin, destination, sort_by) {
     const response = await this.tripDal.getTrips(origin, destination);
-
-    const filteredTrips = response.data.filter(trip =>
-      trip.origin === origin && trip.destination === destination
+    const filteredTrips = response.data.filter(
+      trip => trip.origin === origin && trip.destination === destination
     );
 
     return filteredTrips.sort((a, b) =>
@@ -23,24 +20,24 @@ class TripService {
     );
   }
 
-   saveTrip(req, res) {
-    const trip = req.body;
+  saveTrip(trip) {
     if (!trip || !trip.id) {
-      return res.status(400).json({ error: 'Trip data with ID is required' });
+      throw new Error('Trip data with ID is required');
     }
     this.tripDal.saveTrip(trip);
-    res.status(201).json({ message: 'Trip saved', trip });
+    return { message: 'Trip saved', trip };
   }
 
-   listSavedTrips(req, res) {
-    this.tripDal.all();
-    res.json(savedTrips);
+  listSavedTrips() {
+    return this.tripDal.all();
   }
 
-   deleteTrip(req, res) {
-    const { id } = req.params;
-    this.tripDal.deleteTrip(trip)
-    res.json({ message: `Trip ${id} deleted` });
+  deleteTrip(id) {
+    if (!id) {
+      throw new Error('Trip ID is required');
+    }
+    const updatedTrips = this.tripDal.deleteTrip(id);
+    return { message: `Trip ${id} deleted`, trips: updatedTrips };
   }
 }
 
