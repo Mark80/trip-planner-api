@@ -1,5 +1,5 @@
-const TripService = require('../main/tripService');
-const PathFinder = require('../main/pathFinder'); // importa PathFinder
+const TripService = require('../main/services/tripService');
+const PathFinder = require('../main/services/pathFinder'); // importa PathFinder
 
 describe('TripService', () => {
   let tripDalMock;

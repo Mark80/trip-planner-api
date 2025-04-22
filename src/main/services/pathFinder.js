@@ -5,10 +5,11 @@ class PathFinder {
       return this._findPath(trips, origin, destination, 'cost');
     }
   
-    findShortestPath(trips, origin, destination) {
+    findFastestPath(trips, origin, destination) {
       return this._findPath(trips, origin, destination, 'duration');
     }
   
+    // It could happen that the shortest or least expensive route from A -> B is A -> C -> B.
     _findPath(trips, origin, destination, mode) {
       const graph = this._buildGraph(trips);
       const visited = new Set();

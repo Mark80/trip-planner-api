@@ -1,4 +1,4 @@
-const PathFinder = require('../main/pathFinder');
+const PathFinder = require('../main/services/pathFinder');
 
 describe('PathFinder', () => {
   const trips = [
@@ -23,7 +23,7 @@ describe('PathFinder', () => {
   });
 
   test('findShortestPath returns the path with lowest total duration', () => {
-    const path = pathFinder.findShortestPath(trips, 'A', 'D');
+    const path = pathFinder.findFastestPath(trips, 'A', 'D');
     expect(path.map(p => p.id)).toEqual(['1', '4']); // A -> B -> D
     const totalDuration = path.reduce((sum, trip) => sum + trip.duration, 0);
     expect(totalDuration).toBe(5); // 2 (A->B) + 3 (B->D)

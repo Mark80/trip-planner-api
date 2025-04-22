@@ -2,12 +2,16 @@
 # Trip Planner API
 
 This project is a simple API for planning and saving flight trips. It provides endpoints to search, save, delete, and retrieve flight paths based on cost or duration.
+At startup, the application saves all the trips for every combination of origin and destination in a cache. This is done to create the graph that connects all the destinations. 
+The best path is then calculated in the PathFinder class.
+This aplication use a in memory database [javascript collection].
+
 
 ## 🛠️ Setup
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/trip-planner-api.git
+git clone https://github.com/Mark80/trip-planner-api.git
 cd trip-planner-api
 ```
 
@@ -23,7 +27,7 @@ PORT=3000
 JWT_SECRET=your_jwt_secret
 ```
 
-### 4. Run the app
+### 4.1 Run the app
 ```bash
 yarn start
 ```
@@ -31,6 +35,11 @@ yarn start
 For development with hot reload:
 ```bash
 yarn dev
+```
+### 4.2 Run the app in docker 
+```bash
+docker build -t trip-planner .
+docker run -p 3000:3000 trip-planner
 ```
 
 ## ✅ Running Tests

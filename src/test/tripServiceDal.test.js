@@ -1,5 +1,5 @@
 const axios = require('axios');
-const TripServiceDal = require('../main/tripDal');
+const TripServiceDal = require('../main/dal/tripDal');
 
 // Mock di axios.get
 jest.mock('axios');

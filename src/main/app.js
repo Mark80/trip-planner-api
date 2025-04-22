@@ -2,14 +2,14 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const TripService = require('./tripService');
-const TripServiceDal = require('./tripDal');
-const PathFinder = require('./pathFinder');
+const TripService = require('./services/tripService');
+const TripServiceDal = require('./dal/tripDal');
+const PathFinder = require('./services/pathFinder');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load(path.join(__dirname, '../../docs/swagger.yaml'));
-const FetchTrips = require('./allTrips');
-const airports = require('./airports');
+const FetchTrips = require('./services/allTrips');
+const airports = require('./places');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -55,8 +55,9 @@ app.get('/api/trips', async (req, res) => {
   const { origin, destination, sort_by } = req.query;
 
   try {
-    const allTrips = fetchTrips.getCachedTrips();
     const sortedTrips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
+
+    const allTrips = fetchTrips.getCachedTrips();
     const bestMatch = await tripService.findBestMatch(allTrips, origin, destination, sort_by);
 
     res.json({

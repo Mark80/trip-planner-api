@@ -23,7 +23,8 @@ class TripServiceDal {
     }
 
     deleteTrip(id){
-      return savedTrips.filter(trip => trip.id !== id);  
+      savedTrips = savedTrips.filter(trip => trip.id !== id)
+      return savedTrips;  
     }
 
     all(){

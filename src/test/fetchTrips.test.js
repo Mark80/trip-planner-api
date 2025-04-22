@@ -1,4 +1,4 @@
-const FetchTrips = require('../main/allTrips');
+const FetchTrips = require('../main/services/allTrips');
 
 // Mock di TripServiceDal
 const mockTripServiceDal = {

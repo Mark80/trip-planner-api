@@ -10,22 +10,28 @@ class TripService {
   }
 
   async fetchAndSortTrips(origin, destination, sort_by) {
-    const response = await this.tripDal.getTrips(origin, destination);
-
-    const filteredTrips = response.data.filter(
-      trip => trip.origin === origin && trip.destination === destination
-    );
-
-    return filteredTrips.sort((a, b) =>
-      sort_by === 'fastest' ? a.duration - b.duration : a.cost - b.cost
-    );
+    try {
+      const response = await this.tripDal.getTrips(origin, destination);
+      const filteredTrips = response.data.filter(
+        trip => trip.origin === origin && trip.destination === destination
+      );
+  
+      return filteredTrips.sort((a, b) =>
+        sort_by === 'fastest' ? a.duration - b.duration : a.cost - b.cost
+      );
+    } catch (error) {
+      console.error(`Error fetching trips for ${origin} to ${destination}:`, error);
+      throw new Error('Failed to fetch trips');
+    }
   }
 
   async findBestMatch(trips, origin, destination, sort_by) {
     if (sort_by === 'fastest') {
-      return this.pathFinder.findShortestPath(trips, origin, destination);
-    } else {
+      return this.pathFinder.findFastestPath(trips, origin, destination);
+    } else if (sort_by === 'cheapest') {
       return this.pathFinder.findCheapestPath(trips, origin, destination);
+    } else {
+      throw new Error(`Invalid sort_by value: ${sort_by}`);
     }
   }
 
