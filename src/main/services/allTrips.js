@@ -2,7 +2,6 @@
 
 class FetchTrips {
     constructor(tripServiceDal, airports) {
-      // Iniezione di TripServiceDal
       this.tripServiceDal = tripServiceDal;
       this.airports = airports;
       console.debug(airports);

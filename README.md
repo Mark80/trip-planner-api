@@ -2,9 +2,13 @@
 # Trip Planner API
 
 This project is a simple API for planning and saving flight trips. It provides endpoints to search, save, delete, and retrieve flight paths based on cost or duration.
+
 At startup, the application saves all the trips for every combination of origin and destination in a cache. This is done to create the graph that connects all the destinations. 
+This step takes some time. In a real-world scenario, it should probably be implemented asynchronously (for example, using a queue). In this case, the graph would be updated in real-time and maybe use a graph database.
+I prefer this approach instead of calling the API every time. The main reason is to improve the performance experienced by the customer.
+The DAL, which handles communication with the external service, performs object mapping to decouple the logic from the contract. However, for simplicity, I kept the same format.
 The best path is then calculated in the PathFinder class.
-This aplication use a in memory database [javascript collection].
+This aplication use a in memory database [javascript collection] for simplicity.
 
 
 ## 🛠️ Setup
@@ -20,11 +24,12 @@ cd trip-planner-api
 yarn install
 ```
 
-### 3. Create `.env` file
+### 3. Create `.env` file (you can rename .env.example)
 Create a `.env` file in the root with the following:
 ```env
 PORT=3000
 JWT_SECRET=your_jwt_secret
+TRIPS_API_KEY=api_key
 ```
 
 ### 4.1 Run the app

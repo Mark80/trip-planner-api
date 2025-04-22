@@ -32,7 +32,8 @@ coverage/
 # Build directory (if any)
 dist/
 
-yarn/
+.yarn/
+yarn.lock
 
 # TypeScript
 *.tsbuildinfo

@@ -10,7 +10,6 @@ describe('TripServiceDal', () => {
   beforeEach(() => {
     service = new TripServiceDal();
 
-    // reset dello stato condiviso tra test
     axios.get.mockReset();
   });
 
