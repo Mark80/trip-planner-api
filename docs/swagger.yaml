@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: Trip Planner API
+  version: 1.0.0
+  description: API per gestire viaggi
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/auth/login:
+    post:
+      summary: Login per ottenere il token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Token JWT ottenuto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /api/trips/search:
+    get:
+      summary: Ricerca dei viaggi
+      parameters:
+        - name: origin
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: destination
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista di viaggi
+      security:
+        - bearerAuth: []
+
+  /api/trips/save:
+    post:
+      summary: Salva un viaggio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+      responses:
+        '201':
+          description: Viaggio salvato
+      security:
+        - bearerAuth: []
+
+  /api/trips/saved:
+    get:
+      summary: Lista dei viaggi salvati
+      responses:
+        '200':
+          description: Viaggi salvati
+      security:
+        - bearerAuth: []
+
+  /api/trips/delete/{id}:
+    delete:
+      summary: Elimina un viaggio
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Viaggio eliminato
+      security:
+        - bearerAuth: []
+
+components:
+  schemas:
+    Trip:
+      type: object
+      required:
+        - id
+        - origin
+        - destination
+        - cost
+        - duration
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
+        cost:
+          type: number
+        duration:
+          type: number

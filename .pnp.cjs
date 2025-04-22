@@ -33,7 +33,9 @@ const RAW_RUNTIME_STATE =
           ["jest", "virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:29.7.0"],\
           ["jsonwebtoken", "npm:9.0.2"],\
           ["nodemon", "npm:3.1.9"],\
-          ["uuid", "npm:9.0.1"]\
+          ["swagger-ui-express", "virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:5.0.1"],\
+          ["uuid", "npm:9.0.1"],\
+          ["yamljs", "npm:0.3.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1260,6 +1262,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../.yarn/berry/cache/@pkgjs-parseargs-npm-0.11.0-cd2a3fe948-10c0.zip/node_modules/@pkgjs/parseargs/",\
         "packageDependencies": [\
           ["@pkgjs/parseargs", "npm:0.11.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@scarf/scarf", [\
+      ["npm:1.4.0", {\
+        "packageLocation": "./.yarn/unplugged/@scarf-scarf-npm-1.4.0-f6114c29f9/node_modules/@scarf/scarf/",\
+        "packageDependencies": [\
+          ["@scarf/scarf", "npm:1.4.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5142,6 +5153,39 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["swagger-ui-dist", [\
+      ["npm:5.21.0", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-ui-dist-npm-5.21.0-76602d281b-10c0.zip/node_modules/swagger-ui-dist/",\
+        "packageDependencies": [\
+          ["swagger-ui-dist", "npm:5.21.0"],\
+          ["@scarf/scarf", "npm:1.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["swagger-ui-express", [\
+      ["npm:5.0.1", {\
+        "packageLocation": "../.yarn/berry/cache/swagger-ui-express-npm-5.0.1-a36db7d969-10c0.zip/node_modules/swagger-ui-express/",\
+        "packageDependencies": [\
+          ["swagger-ui-express", "npm:5.0.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:5.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/swagger-ui-express-virtual-bd988854b5/2/.yarn/berry/cache/swagger-ui-express-npm-5.0.1-a36db7d969-10c0.zip/node_modules/swagger-ui-express/",\
+        "packageDependencies": [\
+          ["swagger-ui-express", "virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:5.0.1"],\
+          ["@types/express", null],\
+          ["express", "npm:4.21.2"],\
+          ["swagger-ui-dist", "npm:5.21.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/express",\
+          "express"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["tar", [\
       ["npm:7.4.3", {\
         "packageLocation": "../.yarn/berry/cache/tar-npm-7.4.3-1dbbd1ffc3-10c0.zip/node_modules/tar/",\
@@ -5228,7 +5272,9 @@ const RAW_RUNTIME_STATE =
           ["jest", "virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:29.7.0"],\
           ["jsonwebtoken", "npm:9.0.2"],\
           ["nodemon", "npm:3.1.9"],\
-          ["uuid", "npm:9.0.1"]\
+          ["swagger-ui-express", "virtual:b860dde45adc39bdc6a2e21740254ddc85962a516e188fa8a9969b57da604aba0c5bc75bb078c521e1f7e26a8ff9ea93b5a94555fdd027ab5171b81c435d4a13#npm:5.0.1"],\
+          ["uuid", "npm:9.0.1"],\
+          ["yamljs", "npm:0.3.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -5470,6 +5516,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../.yarn/berry/cache/yallist-npm-5.0.0-8732dd9f1c-10c0.zip/node_modules/yallist/",\
         "packageDependencies": [\
           ["yallist", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["yamljs", [\
+      ["npm:0.3.0", {\
+        "packageLocation": "../.yarn/berry/cache/yamljs-npm-0.3.0-b0b262e524-10c0.zip/node_modules/yamljs/",\
+        "packageDependencies": [\
+          ["yamljs", "npm:0.3.0"],\
+          ["argparse", "npm:1.0.10"],\
+          ["glob", "npm:7.2.3"]\
         ],\
         "linkType": "HARD"\
       }]\

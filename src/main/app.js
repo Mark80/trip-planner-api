@@ -1,16 +1,29 @@
 require('dotenv').config();
+
+const path = require('path');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const TripService = require('./tripService');
 const TripServiceDal = require('./tripDal');
 const PathFinder = require('./pathFinder');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load(path.join(__dirname, '../../docs/swagger.yaml'));
+const FetchTrips = require('./allTrips');
+const airports = require('./airports');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const tripService = new TripService(new TripServiceDal(), new PathFinder());
+
+const tripServiceDal = new TripServiceDal();
+const tripService = new TripService(tripServiceDal, new PathFinder());
+const fetchTrips = new FetchTrips(tripServiceDal, airports);
+
+fetchTrips.fetchAllTrips();
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -23,6 +36,9 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body;
@@ -42,8 +58,7 @@ app.get('/api/trips/search', async (req, res) => {
   const { origin, destination, sort_by } = req.query;
 
   try {
-    const allTripsResponse = await tripService.tripDal.getTrips(origin, destination);
-    const allTrips = allTripsResponse.data;
+    const allTrips = fetchTrips.getCachedTrips();
 
     const sortedTrips = await tripService.fetchAndSortTrips(origin, destination, sort_by);
     const bestMatch = await tripService.findBestMatch(allTrips, origin, destination, sort_by);

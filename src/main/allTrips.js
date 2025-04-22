@@ -1,35 +1,46 @@
 
-const TripServiceDal = require('./tripServiceDal'); // Importa il TripServiceDal
-const tripServiceDal = new TripServiceDal();
 
-const airports = [
-    "ATL", "PEK", "LAX", "DXB", "HND", "ORD", "LHR", "PVG", "CDG", "DFW",
-    "AMS", "FRA", "IST", "CAN", "JFK", "SIN", "DEN", "ICN", "BKK", "SFO",
-    "LAS", "CLT", "MIA", "KUL", "SEA", "MUC", "EWR", "MAD", "HKG", "MCO",
-    "PHX", "IAH", "SYD", "MEL", "GRU", "YYZ", "LGW", "BCN", "MAN", "BOM",
-    "DEL", "ZRH", "SVO", "DME", "JNB", "ARN", "OSL", "CPH", "HEL", "VIE"
-];
-
-
-async function fetchAllTrips() {
-    try {
-        for (let origin of airports) {
-            for (let destination of airports) {
-                // Non fare la richiesta per la stessa combinazione origin/destination
-                if (origin === destination) continue;
-
-                console.log(`Fetching trips for ${origin} to ${destination}`);
-                
-                // Chiamata al servizio per ottenere i trips
-                const response = await tripServiceDal.getTrips(origin, destination);
-                
-                // Qui puoi fare qualcosa con la risposta, per esempio loggarla o salvarla
-                console.log(`Trips from ${origin} to ${destination}:`, response.data);
-            }
-        }
-    } catch (error) {
-        console.error('Error fetching trips:', error);
+class FetchTrips {
+    constructor(tripServiceDal, airports) {
+      // Iniezione di TripServiceDal
+      this.tripServiceDal = tripServiceDal;
+      this.airports = airports;
+      this.cachedTrips = [];
     }
-}
+  
+    async fetchAllTrips() {
+      try {
+        const allTrips = [];
+  
+        for (let origin of this.airports) {
+          for (let destination of this.airports) {
+            if (origin === destination) continue;
+  
+            console.log(`Fetching trips for ${origin} to ${destination}`);
+  
+            const response = await this.tripServiceDal.getTrips(origin, destination);
+            const trips = response.data || [];
+  
+            allTrips.push(...trips);
+          }
+        }
+  
+        this.cachedTrips = allTrips;
+        console.log(`✔️  Fetched and cached ${this.cachedTrips.length} trips`);
+      } catch (error) {
+        console.error('❌ Error fetching trips:', error);
+      }
+    }
+  
+    getCachedTrips() {
+      return this.cachedTrips;
+    }
 
-module.exports = { fetchAllTrips };
+    resetCache() {
+        this.cachedTrips = [];
+      }
+
+  }
+  
+  module.exports = FetchTrips;
+  
