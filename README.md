@@ -75,5 +75,3 @@ swagger.yaml              # API spec
 ```
 
 ---
-
-MIT License
